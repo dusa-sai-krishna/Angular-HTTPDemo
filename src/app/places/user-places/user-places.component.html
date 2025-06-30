@@ -4,6 +4,6 @@
 	@if(isFetching() && !error()){
 		<p class="fallback-text">Fetching Please wait...</p>
 	} @else if (!isFetching() && !error()) {
-		<app-places [places]="places()!" />
+		<app-places (selectPlace)="onSelectPlace($event)" [places]="places()!" />
 	}
 </app-places-container>

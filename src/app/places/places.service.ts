@@ -25,9 +25,9 @@ export class PlacesService {
     }
 
     addPlaceToUserPlaces(place: Place) {
-        let prevData: Place[] = [];
+        let prevData: Place[] = this.userPlaces();
         if (!this.userPlaces().some(p => p.id === place.id)) {
-             prevData = this.userPlaces();
+
             this.userPlaces.update(userPlaces => [...userPlaces, place]);
 
         }
@@ -41,7 +41,22 @@ export class PlacesService {
 
     }
 
-    removeUserPlace(place: Place) {
+    removeUserPlace(placeId: string) {
+        //optimistic Updating
+        let prevData = this.userPlaces();
+        this.userPlaces.update(oldPlaces=>oldPlaces.filter(p => p.id !== placeId));
+        return this.httpClient.delete<{ userPlaces: Place[] }>("http://localhost:3000/user-places/" + placeId).pipe(
+            tap({
+                next: resData => {
+                    console.log(resData.userPlaces);
+                    this.userPlaces.set(resData.userPlaces)
+                }
+            }),
+            catchError((error) => throwError(() => {
+                this.userPlaces.set(prevData);
+                return new Error(error)
+            }))
+        )
     }
 
     private fetchPlaces(url: string) {

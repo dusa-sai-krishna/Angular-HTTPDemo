@@ -40,7 +40,7 @@ app.get("/user-places", async (req, res) => {
 
 app.put("/user-places", async (req, res) => {
 
-  return res.status(500).json();
+
 
   const placeId = req.body.placeId;
 

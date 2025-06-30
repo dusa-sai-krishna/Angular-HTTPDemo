@@ -6,6 +6,7 @@ import {PlacesComponent} from '../places.component';
 import {Subscription} from "rxjs";
 import {PlacesService} from "../places.service";
 import {ErrorService} from "../../../../shared/error.service";
+import {Place} from "../place.model";
 
 @Component({
     selector: 'app-user-places',
@@ -23,6 +24,19 @@ private errorService = inject(ErrorService);
     error = signal("");
     isFetching = signal(true);
 
+
+    onSelectPlace(place:Place){
+
+        this.placeService.removeUserPlace(place.id).subscribe({
+            error:error=>{
+                this.errorService.showError("Error while removing user places.");
+                console.log(error.message);
+        },
+            complete: ()=>{
+                this.isFetching.set(false);
+            }
+        })
+    }
 
     ngOnInit() {
         this.subscription = this.placeService.loadUserPlaces().subscribe({
