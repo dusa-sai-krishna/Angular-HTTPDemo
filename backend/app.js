@@ -29,6 +29,8 @@ app.get("/places", async (req, res) => {
 });
 
 app.get("/user-places", async (req, res) => {
+
+
   const fileContent = await fs.readFile("./data/user-places.json");
 
   const places = JSON.parse(fileContent);
@@ -37,6 +39,9 @@ app.get("/user-places", async (req, res) => {
 });
 
 app.put("/user-places", async (req, res) => {
+
+  return res.status(500).json();
+
   const placeId = req.body.placeId;
 
   const fileContent = await fs.readFile("./data/places.json");

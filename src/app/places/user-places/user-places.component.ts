@@ -5,6 +5,7 @@ import {PlacesComponent} from '../places.component';
 
 import {Subscription} from "rxjs";
 import {PlacesService} from "../places.service";
+import {ErrorService} from "../../../../shared/error.service";
 
 @Component({
     selector: 'app-user-places',
@@ -16,7 +17,7 @@ import {PlacesService} from "../places.service";
 export class UserPlacesComponent implements OnInit, OnDestroy {
 
     private placeService  = inject(PlacesService);
-
+private errorService = inject(ErrorService);
     places = this.placeService.userPlacesReadOnly
     private subscription: Subscription | undefined = undefined;
     error = signal("");
@@ -28,6 +29,7 @@ export class UserPlacesComponent implements OnInit, OnDestroy {
             error: error => {
                 console.error(error.message);
                 this.error.set("Something went wrong while fetching favourite places");
+                this.errorService.showError("Something went wrong while fetching favourite places");
             },
             complete: () => this.isFetching.set(false)
         })
