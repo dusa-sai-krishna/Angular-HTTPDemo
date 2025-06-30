@@ -48,7 +48,7 @@ export class PlacesService {
         return this.httpClient.delete<{ userPlaces: Place[] }>("http://localhost:3000/user-places/" + placeId).pipe(
             tap({
                 next: resData => {
-                    console.log(resData.userPlaces);
+
                     this.userPlaces.set(resData.userPlaces)
                 }
             }),
